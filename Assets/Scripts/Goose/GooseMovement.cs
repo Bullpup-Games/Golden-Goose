@@ -9,7 +9,7 @@ public class GooseMovement : MonoBehaviour
 
     //this should be the cursor, unless something else is more urgent
     //such as food, water, a toy, etc. 
-    [SerializeField] private Transform target; 
+    public Transform target; 
     
     NavMeshAgent _agent;
     
