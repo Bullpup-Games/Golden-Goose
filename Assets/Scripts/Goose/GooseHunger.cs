@@ -13,19 +13,19 @@ public class GooseHunger : MonoBehaviour
         "in the bowl if it is available")]
     [SerializeField] private int _hungerThreshold = 50;
 
-    [SerializeField] private int _startingHunger = 100;
-    [SerializeField] private float _currentHunger;
+    public int startingHunger = 100;
+    public float currentHunger;
 
     private Coroutine _decrementRoutine;
     private Coroutine _incrementRoutine;
 
     public bool IsEating;
 
-    public bool IsGooseHungry() => _currentHunger <= _hungerThreshold;
+    public bool IsGooseHungry() => currentHunger <= _hungerThreshold;
 
     private void Start()
     {
-        _currentHunger = _startingHunger;
+        currentHunger = startingHunger;
 
         // The goose will start losing hunger as soon as the game starts.
         StartHungerDecay();
@@ -35,9 +35,9 @@ public class GooseHunger : MonoBehaviour
     {
         while (true)
         {
-            if (_currentHunger > 0)
+            if (currentHunger > 0)
             {
-                _currentHunger -= _decayRate;
+                currentHunger -= _decayRate;
             }
             else
             {
@@ -59,7 +59,7 @@ public class GooseHunger : MonoBehaviour
         IsEating = true;
         while (true)
         {
-            if (_currentHunger > _startingHunger - _replenishRate)
+            if (currentHunger > startingHunger - _replenishRate)
             {
                 Debug.Log("The Goose is full.");
                 IsEating = false;
@@ -79,7 +79,7 @@ public class GooseHunger : MonoBehaviour
                 yield break;
             }
 
-            _currentHunger += _replenishRate;
+            currentHunger += _replenishRate;
             yield return new WaitForSeconds(1f);
         }
     }
