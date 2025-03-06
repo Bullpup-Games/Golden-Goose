@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class GooseMovement : MonoBehaviour
 {
@@ -58,6 +59,8 @@ public class GooseMovement : MonoBehaviour
         if (other.CompareTag("Cursor"))
         {
             Debug.Log("You Died");
+            DeathStateTracker.SetState(DeathState.Touched);
+            SceneManager.LoadScene("GameOver");
         }  
         else if (other.CompareTag("FoodBowl"))
         {

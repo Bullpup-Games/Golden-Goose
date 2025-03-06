@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GooseHunger : MonoBehaviour
 {
@@ -42,6 +43,9 @@ public class GooseHunger : MonoBehaviour
             else
             {
                 Debug.Log("The Goose Starved!");
+
+                DeathStateTracker.SetState(DeathState.Starved);
+                SceneManager.LoadScene("GameOver");
             }
 
             yield return new WaitForSeconds(1f);
