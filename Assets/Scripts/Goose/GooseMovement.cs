@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,6 +14,8 @@ public class GooseMovement : MonoBehaviour
     private GooseHunger _hunger;
     
     NavMeshAgent _agent;
+
+    private Coroutine moneyRoutine;
     
    
     void Start()
@@ -21,6 +25,8 @@ public class GooseMovement : MonoBehaviour
 
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
+
+        startMoneyMaking();
     }
 
     
@@ -64,6 +70,20 @@ public class GooseMovement : MonoBehaviour
             Debug.Log("Food bowl hit.");
             _hunger.StopHungerDecay();
             _hunger.StartHungerReplenish();
+        }
+    }
+
+    private void startMoneyMaking()
+    {
+        moneyRoutine ??= StartCoroutine(MakeMoney());
+    }
+    private IEnumerator MakeMoney()
+    {
+
+        while (true)
+        {
+            MoneyUi.Instance.updateMoney(10);
+            yield return new WaitForSeconds(2);
         }
     }
 }
