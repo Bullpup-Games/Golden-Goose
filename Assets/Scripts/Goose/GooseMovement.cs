@@ -1,4 +1,5 @@
 using System.Collections;
+using DefaultNamespace;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -17,6 +18,12 @@ public class GooseMovement : MonoBehaviour
 
     private Coroutine moneyRoutine;
     
+    public CleanState cleanState;
+
+    public string stateName;
+    
+    
+    
    
     void Start()
     {
@@ -25,6 +32,8 @@ public class GooseMovement : MonoBehaviour
 
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
+
+        setInitialState();
 
         startMoneyMaking();
     }
@@ -73,6 +82,39 @@ public class GooseMovement : MonoBehaviour
         }
     }
 
+    private void setInitialState()
+    {
+        switch (stateName)
+        {
+            case "Shiny" :
+                changeState(State.Shiny);
+                break;
+            case "Clean" :
+                changeState(State.Clean);
+                break;
+            case "Normal" :
+                changeState(State.Normal);
+                break;
+            case "Dirty" :
+                changeState(State.Dirty);
+                break;
+            case "Filthy" :
+                changeState(State.Filthy);
+                break;
+            default :
+                changeState(State.Normal);
+                break;
+        }
+    }
+
+
+    public void changeState(State newState)
+    {
+        this.cleanState = new CleanState(newState);
+        gameObject.GetComponent<NavMeshAgent>().speed = this.cleanState.speed;
+        
+    }
+    
     private void startMoneyMaking()
     {
         moneyRoutine ??= StartCoroutine(MakeMoney());
@@ -82,7 +124,7 @@ public class GooseMovement : MonoBehaviour
 
         while (true)
         {
-            MoneyUi.Instance.updateMoney(10);
+            MoneyUi.Instance.updateMoney(cleanState.payout);
             yield return new WaitForSeconds(2);
         }
     }
