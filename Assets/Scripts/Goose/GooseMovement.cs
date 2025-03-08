@@ -1,3 +1,6 @@
+using System.Collections;
+using DefaultNamespace;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -13,6 +16,14 @@ public class GooseMovement : MonoBehaviour
     private GooseHunger _hunger;
     
     NavMeshAgent _agent;
+
+    private Coroutine moneyRoutine;
+    
+    public CleanState cleanState;
+
+    public string stateName;
+    
+    
     
    
     void Start()
@@ -23,6 +34,10 @@ public class GooseMovement : MonoBehaviour
 
         // _agent.updateRotation = false;
         _agent.updateUpAxis = false;
+
+        setInitialState();
+
+        startMoneyMaking();
     }
 
     
@@ -77,6 +92,53 @@ public class GooseMovement : MonoBehaviour
             Debug.Log("Food bowl hit.");
             _hunger.StopHungerDecay();
             _hunger.StartHungerReplenish();
+        }
+    }
+
+    private void setInitialState()
+    {
+        switch (stateName)
+        {
+            case "Shiny" :
+                changeState(State.Shiny);
+                break;
+            case "Clean" :
+                changeState(State.Clean);
+                break;
+            case "Normal" :
+                changeState(State.Normal);
+                break;
+            case "Dirty" :
+                changeState(State.Dirty);
+                break;
+            case "Filthy" :
+                changeState(State.Filthy);
+                break;
+            default :
+                changeState(State.Normal);
+                break;
+        }
+    }
+
+
+    public void changeState(State newState)
+    {
+        this.cleanState = new CleanState(newState);
+        gameObject.GetComponent<NavMeshAgent>().speed = this.cleanState.speed;
+        
+    }
+    
+    private void startMoneyMaking()
+    {
+        moneyRoutine ??= StartCoroutine(MakeMoney());
+    }
+    private IEnumerator MakeMoney()
+    {
+
+        while (true)
+        {
+            MoneyUi.Instance.updateMoney(cleanState.payout);
+            yield return new WaitForSeconds(2);
         }
     }
 }
