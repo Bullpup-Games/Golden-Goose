@@ -364,6 +364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   money: 100
+  moneyText: {fileID: 320547470}
 --- !u!114 &320547470
 MonoBehaviour:
   m_ObjectHideFlags: 0

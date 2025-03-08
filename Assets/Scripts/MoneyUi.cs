@@ -8,7 +8,7 @@ public class MoneyUi : MonoBehaviour
 {
     
     public int money;
-    private TextMeshProUGUI moneyText;
+    [SerializeField] private TextMeshProUGUI moneyText;
     // Start is called before the first frame update
 
     #region singleton
@@ -39,7 +39,7 @@ public class MoneyUi : MonoBehaviour
 
     void Start()
     {
-       moneyText = GetComponent<TextMeshProUGUI>();
+       // moneyText = GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
