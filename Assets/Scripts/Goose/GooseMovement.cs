@@ -21,7 +21,7 @@ public class GooseMovement : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _hunger = GetComponent<GooseHunger>();
 
-        _agent.updateRotation = false;
+        // _agent.updateRotation = false;
         _agent.updateUpAxis = false;
     }
 
@@ -37,7 +37,16 @@ public class GooseMovement : MonoBehaviour
         {
             _agent.SetDestination(player.position);
         }
-        
+
+        Vector2 velocity = _agent.velocity;
+        // If velocity is large enough, rotate to face direction
+        if (velocity.sqrMagnitude > 0.001f)
+        {
+            float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+        }
+
     }
 
     /*
