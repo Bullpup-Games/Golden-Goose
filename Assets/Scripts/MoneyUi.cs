@@ -21,6 +21,7 @@ public class MoneyUi : MonoBehaviour
     private MoneyUi()
     {
         money = 100;
+        
     }
     private void Awake()
     {
