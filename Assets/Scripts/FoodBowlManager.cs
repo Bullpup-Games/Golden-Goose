@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class FoodBowlManager : MonoBehaviour
 {
@@ -17,6 +18,12 @@ public class FoodBowlManager : MonoBehaviour
     // Event gets invoked whenever the food amount changes
     public event Action<int, int> OnFoodChanged;
 
+    [SerializeField] private Sprite emptyBowl;
+    [SerializeField] private Sprite halfBowl;
+    [SerializeField] private Sprite fullBowl;
+
+    private SpriteRenderer bowlRenderer;
+
     public bool IsBowlFilled() => foodInBowl >= minFoodToEat;
 
     private void Awake()
@@ -29,6 +36,7 @@ public class FoodBowlManager : MonoBehaviour
         _instance = this;
 
         // Transform = gameObject.transform;
+        bowlRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -46,6 +54,7 @@ public class FoodBowlManager : MonoBehaviour
         if (foodInBowl < maxFoodAllowed)
         {
             foodInBowl++;
+            UpdateBowlSprite();
             OnFoodChanged?.Invoke(foodInBowl, maxFoodAllowed);
         }
         else
@@ -62,7 +71,28 @@ public class FoodBowlManager : MonoBehaviour
         }
 
         foodInBowl -= amountToEat;
+        UpdateBowlSprite();
         OnFoodChanged?.Invoke(foodInBowl, maxFoodAllowed);
         return true;
+    }
+
+    private void UpdateBowlSprite()
+    {
+        float percentFilled = (float)foodInBowl / maxFoodAllowed;
+        percentFilled = Mathf.Clamp01(percentFilled);
+
+
+        if (percentFilled > .66f)
+        {
+            bowlRenderer.sprite = fullBowl;
+        }
+        else if (percentFilled > .33f)
+        {
+            bowlRenderer.sprite = halfBowl;
+        }
+        else
+        {
+            bowlRenderer.sprite = emptyBowl;
+        }
     }
 }

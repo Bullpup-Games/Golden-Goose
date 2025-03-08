@@ -10,6 +10,21 @@ public class CursorManager : MonoBehaviour
     
     [SerializeField]
     private Vector2 clickPosition = Vector2.zero;
+
+    private static CursorManager _instance;
+    public static CursorManager Instance => _instance;
+
+    private void Awake()
+    {
+        if (_instance is not null)
+        {
+            Destroy( _instance );
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
     void Start()
     {
         Cursor.SetCursor(cursorTexture, clickPosition, CursorMode.Auto);
