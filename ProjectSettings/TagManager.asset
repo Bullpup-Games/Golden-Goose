@@ -7,6 +7,7 @@ TagManager:
   - Cursor
   - Goose
   - FoodBowl
+  - Water
   layers:
   - Default
   - TransparentFX

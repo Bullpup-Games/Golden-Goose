@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DefaultNamespace;
 using Unity.Collections;
@@ -18,11 +19,15 @@ public class GooseMovement : MonoBehaviour
     NavMeshAgent _agent;
 
     private Coroutine moneyRoutine;
+    private Coroutine dirtRoutine;
+    private Coroutine bathRoutine;
     
     public CleanState cleanState;
 
     public string stateName;
-    
+
+    public float dirtTimer;
+    public float bathTimer;
     
     
    
@@ -38,6 +43,8 @@ public class GooseMovement : MonoBehaviour
         setInitialState();
 
         startMoneyMaking();
+        
+        startDirtRoutine();
     }
 
     
@@ -92,6 +99,9 @@ public class GooseMovement : MonoBehaviour
             Debug.Log("Food bowl hit.");
             _hunger.StopHungerDecay();
             _hunger.StartHungerReplenish();
+        } else if (other.CompareTag("Water"))
+        {
+            bathRoutine ??= StartCoroutine(Bathe());
         }
     }
 
@@ -132,6 +142,13 @@ public class GooseMovement : MonoBehaviour
     {
         moneyRoutine ??= StartCoroutine(MakeMoney());
     }
+
+    private void startDirtRoutine()
+    {
+        dirtRoutine ??= StartCoroutine(GetDirty());
+    }
+    
+    
     private IEnumerator MakeMoney()
     {
 
@@ -140,5 +157,37 @@ public class GooseMovement : MonoBehaviour
             MoneyUi.Instance.updateMoney(cleanState.payout);
             yield return new WaitForSeconds(2);
         }
+    }
+
+    private IEnumerator GetDirty()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(dirtTimer);
+            
+            cleanState = CleanState.changeState(cleanState,-1);
+        }
+    }
+
+    private IEnumerator Bathe()
+    {
+        while (true)
+        {
+            Debug.Log("Entered Bath");
+            yield return new WaitForSeconds(bathTimer);
+            Debug.Log("Bathing");
+            cleanState = CleanState.changeState(cleanState, 1);
+        }
+    }
+
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     bathRoutine ??= StartCoroutine(Bathe());
+    // }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (bathRoutine == null) return;
+        StopCoroutine(bathRoutine);
     }
 }
