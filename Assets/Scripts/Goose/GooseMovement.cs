@@ -17,6 +17,7 @@ public class GooseMovement : MonoBehaviour
    
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Cursor").transform;
         _agent = GetComponent<NavMeshAgent>();
         _hunger = GetComponent<GooseHunger>();
 
